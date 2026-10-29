@@ -26,6 +26,10 @@ FROM node:20.11-slim
 
 WORKDIR /app
 
+# patch OS packages and drop npm (not needed at runtime) to clear CRITICAL CVEs
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
+
 # TODO(step-4e): copy the fully-installed app from the builder stage.
 COPY --from=builder /app /app
 
